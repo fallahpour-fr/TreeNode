@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { textChangeRangeIsUnchanged } from 'typescript';
 
-interface IArray {
+interface ITreeNode {
   title: string,
   id: number,
-  arr: Array<IArray>,
+  childs: Array<ITreeNode>,
 }
 
 function App() {
   const [showData, setShowData] = useState(true)
-  const [root, setRoot] = useState<IArray>({
+  const [root, setRoot] = useState<ITreeNode>({
     title:'root',
     id:0,
-    arr:[]
+    childs:[]
   });
-  const [currentItem, setCurrentItem] = useState<Array<IArray>>([root])
+  const [currentItem, setCurrentItem] = useState<Array<ITreeNode>>(root.childs)
   const AddChildValue = () => {
     setCurrentItem(prev => {
       return [...prev, {
