@@ -4,55 +4,55 @@ import { textChangeRangeIsUnchanged } from 'typescript';
 
 interface ITreeNode {
   title: string,
+  parent_id: number,
   id: number,
   childs: Array<ITreeNode>,
 }
 
+
 function App() {
-  const [showData, setShowData] = useState(true)
   const [root, setRoot] = useState<ITreeNode>({
-    title:'root',
-    id:0,
-    childs:[]
+    title: 'root',
+    parent_id: 0,
+    id: 1,
+    childs: []
   });
-  const [currentItem, setCurrentItem] = useState<Array<ITreeNode>>(root.childs)
+  const [idPhath, setIdPath] = useState<Array<number>>([]);
+  const [currentItem, setCurrentItem] = useState<Array<ITreeNode>>([]);
   const AddChildValue = () => {
-    setCurrentItem(prev => {
-      return [...prev, {
-        title: 'step',
-        arr: [],
-        id: 10
-      }]
-    })
-  }
-  const AddItemValue = (index: any) => {
-    let itemArray = currentItem[index];
-    // itemArray.arr.push({
-    //   title: 'item',
-    //   arr: [],
-    //   id: index
-    // });
-    setCurrentItem(itemArray.arr)
-    // setShowData(false)
-  }
-  const changeHandler=(e:any)=>{
-      console.log(e.target.value);
+    let obj = root.childs;
+    obj.push({
+      title: 'child',
+      parent_id: root.id,
+      id: root.childs.length,
+      childs: []
+    });
+    setRoot({ ...root });
+    setCurrentItem(obj);
+   
   }
 
-  return <div >
+  class Node{
+    key:number
+    constructor(val:number){
+      this.key=val
+    }
+
+    showData(){
+      return `${this.key}`
+    }
+  }
+
+ const NodeOne= new Node(2)
+ console.log(NodeOne)
+  console.log(root)
+  console.log(currentItem)
+  return <div>
     <button onClick={() => { AddChildValue() }} >Add Child</button>
     {currentItem.map((item: any, index: any) => {
       return <div key={index} >
-        <input placeholder={item.title} id={index}  onChange={changeHandler} />
-        <button onClick={() => {AddItemValue(index) }}  > Add Item </button>
-        {/* {currentItem[index].arr.length>0 &&
-          <div style={{display:`${showData ? 'none':'block'}`}}>
-            <button onClick={() => { AddItemValue(index) }} id={index}  >Add Item {index} </button>
-            {currentItem[index].arr.map((item1: any, index1: any) => {
-              return <input key={index1} placeholder={item1.title} id={index1} />
-            })}
-          </div>
-        } */}
+        <input placeholder={item.title} id={index} />
+        <button > Add Item </button>
       </div>
     })}
   </div>
