@@ -1,23 +1,31 @@
+
 export const TreeNode = () => {
-    class Node {
-        key: number;
-        left?: any;
-        rigth?: any;
-        constructor(val: number, left?: number, rigth?: number) {
-            this.key = val;
-            this.left = null;
-            this.rigth = null;
-        }
+
+    type TreeNode = {
+        title: string,
+        childs: Array<TreeNode>
     }
 
-    let NodeOne = null
-    NodeOne = new Node(1);
-    NodeOne.left = new Node(2);
-    NodeOne.rigth = new Node(3);
-    NodeOne.left.left=new Node(4);
+    const Node = (title: string, ...childs: TreeNode[]): TreeNode => {
+        let some = {
+            title,
+            childs:childs??[]
+        }
+        return some;
+    }
 
+    let valuchain = Node('root');
+    let currentNode = valuchain;
+    currentNode.childs.push(Node('step 1')) 
+    currentNode.childs.push(Node('step 2')) 
+    currentNode=valuchain.childs![0];
+    currentNode.childs = [Node('step 1-1'), Node('step 1-2')];
+    currentNode = valuchain.childs![1];
+    currentNode.childs = [Node('step 2-1'), Node('step 2-2')];
+    currentNode = valuchain.childs![0].childs![0];
+    currentNode.childs = [Node('step 1-1-1'), Node('step 1-1-2'),Node('step 1-1-3')];
+    console.log(valuchain);
 
-    console.log(NodeOne)
 
     return <div>hi</div>
 }
