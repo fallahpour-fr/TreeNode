@@ -70,13 +70,13 @@ export const TreeNode = () => {
     }
 
     const deleteButton = (id: number) => {
-        let currentItem = findCurrentItem(idPath, root);
-        currentItem.childs = currentItem.childs.filter((item: any) => item.id !== id);
-        setCurrentNode({...root});
-        
+        let currentItem1 = findCurrentItem(idPath, root);
+        currentItem1.childs = currentItem1.childs.filter((item: any) => item.id !== id);
+        setCurrentNode(currentItem1)
+        setRoot({ ...root });
     }
-
-    console.log(root);
+    console.log('currentNode', currentNode)
+    console.log('root', root);
     return <div>
         <button onClick={() => { AddItem((Math.random())) }} >Add</button>
         {currentNode?.childs.map((item: any, index: any) => {
