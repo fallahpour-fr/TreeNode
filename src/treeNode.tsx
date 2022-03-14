@@ -33,22 +33,25 @@ export const TreeNode = () => {
 
     interface TreeNode {
         title: string,
-        childs: Array<TreeNode>
+        childs: Array<TreeNode>,
+        id: number
     }
 
     const [root, setRoot] = useState<TreeNode>(
         {
             title: 'root',
-            childs: []
+            childs: [],
+            id: 0
         }
     );
     const [currentNode, setCurrentNode] = useState<TreeNode>(root);
     const [idPath, setIdPath] = useState<Array<any>>([]);
 
-    const AddItem = () => {
+    const AddItem = (id: number) => {
         currentNode?.childs.push({
             title: `step`,
-            childs: []
+            childs: [],
+            id: id
         });
         setRoot({ ...root });
     }
@@ -65,12 +68,22 @@ export const TreeNode = () => {
         let currentItem = findCurrentItem(idPath, root);
         setCurrentNode(currentItem);
     }
+
+    const deleteButton = (id: number) => {
+        let currentItem = findCurrentItem(idPath, root);
+        currentItem.childs = currentItem.childs.filter((item: any) => item.id !== id);
+        setCurrentNode({...root});
+        
+    }
+
+    console.log(root);
     return <div>
-        <button onClick={() => { AddItem() }} >Add</button>
+        <button onClick={() => { AddItem((Math.random())) }} >Add</button>
         {currentNode?.childs.map((item: any, index: any) => {
             return <div key={index} >
                 <input placeholder={item.title} id={index} />
-                <button onClick={() => { showStep(index) }} >{index}</button>
+                <button onClick={() => { showStep(index) }} >{item.id}</button>
+                <button onClick={() => { deleteButton(item.id) }} >Delete</button>
             </div>
         })}
     </div>
