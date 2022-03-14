@@ -46,6 +46,7 @@ export const TreeNode = () => {
     );
     const [currentNode, setCurrentNode] = useState<TreeNode>(root);
     const [idPath, setIdPath] = useState<Array<any>>([]);
+    const [value, setValue] = useState<any>([]);
 
     const AddItem = (id: number) => {
         currentNode?.childs.push({
@@ -75,13 +76,19 @@ export const TreeNode = () => {
         setCurrentNode(currentItem1)
         setRoot({ ...root });
     }
-    console.log('currentNode', currentNode)
-    console.log('root', root);
+
+    const onChangHandler = (e: any) => {
+        let inputValue = e.target.value;
+        //   setValue(e.target.value)
+    }
+    console.log(value)
+    // console.log('currentNode', currentNode)
+    // console.log('root', root);
     return <div>
         <button onClick={() => { AddItem((Math.random())) }} >Add</button>
         {currentNode?.childs.map((item: any, index: any) => {
             return <div key={index} >
-                <input placeholder={item.title} id={index} />
+                <input placeholder={item.title} id={index} onChange={onChangHandler} />
                 <button onClick={() => { showStep(index) }} >{item.id}</button>
                 <button onClick={() => { deleteButton(item.id) }} >Delete</button>
             </div>
