@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { Form, Divider, Button, Select, Input } from "antd";
+import { useFormik } from 'formik';
 export const TreeNode = () => {
 
     // type TreeNode = {
@@ -48,12 +50,30 @@ export const TreeNode = () => {
     const [idPath, setIdPath] = useState<Array<any>>([]);
     const [value, setValue] = useState<any>([]);
 
+    const formik = useFormik<any>({
+        initialValues: {
+            step: root
+        },
+        onSubmit: values => { }
+    })
+
     const AddItem = (id: number) => {
-        currentNode?.childs.push({
-            title: `step`,
-            childs: [],
-            id: id
-        });
+        // currentNode?.childs.push({
+        //     title: `step`,
+        //     childs: [],
+        //     id: id
+        // });
+        console.log(formik.values.step.childs)
+        const current = formik.values.step.childs
+        current.push(
+            {
+                title: 'step',
+                childs: [],
+                id: id
+            }
+        )
+
+        formik.setFieldValue('step', formik.values.step)
         setRoot({ ...root });
     }
 
@@ -67,36 +87,41 @@ export const TreeNode = () => {
         idPath.push(index);
         setIdPath([...idPath]);
         let currentItem = findCurrentItem(idPath, root);
-        setCurrentNode(currentItem);
+        console.log(currentItem)
+        formik.setFieldValue('step', currentItem)
+        // setCurrentNode(currentItem);
+        console.log(formik.values.step)
     }
 
     const deleteButton = (id: number) => {
         let currentItem1 = findCurrentItem(idPath, root);
         currentItem1.childs = currentItem1.childs.filter((item: any) => item.id !== id);
-        setCurrentNode(currentItem1)
+        // setCurrentNode(currentItem1)
+        formik.setFieldValue('step', {...currentItem1})
         setRoot({ ...root });
     }
 
-    const onChangHandler = (e: any) => {
-        let inputValue = e.target.value;
-        setValue(inputValue);
-    }
+    // const onChangHandler = (e: any) => {
+    //     let inputValue = e.target.value;
+    //     setValue(inputValue);
+    // }
 
-    const saveData=()=>{
-        //save data in root
-    }
-    console.log(value)
+    // const saveData = () => {
+    //     //save data in root
+    // }
+
     // console.log('currentNode', currentNode)
     // console.log('root', root);
+    // console.log(formik.values)
+
+
+
     return <div>
         <button onClick={() => { AddItem((Math.random())) }} >Add</button>
-        {currentNode?.childs.map((item: any, index: any) => {
-            return <div key={index} >
-                <input placeholder={item.title} name={item.id} onChange={onChangHandler} />
-                <button onClick={() => { showStep(index) }} >{item.id}</button>
-                <button onClick={() => { deleteButton(item.id) }} >Delete</button>
-            </div>
-        })}
-        <button onClick={()=>{saveData()}}>Save</button>
+        {formik.values.step.childs.map((item: any, index: any) => <div key={index} >
+            <input placeholder={item.title} name={item.id} />
+            <button onClick={() => { showStep(index) }} >{item.id}</button>
+            <button onClick={() => { deleteButton(item.id) }} >Delete</button>
+        </div>)}
     </div>
 }

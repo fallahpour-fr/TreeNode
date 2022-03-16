@@ -1,71 +1,49 @@
-// import React, { useState, useEffect } from 'react';
-// export const SaveData = () => {
-//     let data: any = [
-//         {
-//             title: '',
-//             id: 1
-//         },
-//         {
-//             title: '',
-//             id: 2
-//         }
-//     ]
+import React from "react";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { Form, Divider, Button, Select, Input } from "antd";
 
-//     const [inputData, setinputData] = useState<any>()
-
-
-//     const saveData = () => {
-
-//     }
-
-//     const onChangHandler = (e: any) => {
-
-//     }
-
-//     return <form action='' >
-//         {data.map((item: any, index: any) => {
-//             return <div key={index} >
-//                 <input placeholder={item.title} name={item.id} onChange={onChangHandler} />
-//             </div>
-//         })}
-//         <input type="submit" value="submit" />
-//     </form>
-// }
-
-import { Form, Input, Button} from 'antd';
-
-export const SaveData= () => {
-  const onFinish = (values: any) => {
-    console.log(values);
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
-
+export function DynamicField() {
   return (
-    <Form
-      name="basic"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-    >
-      <Form.Item
-        label="Username"
-        name="username"
-        rules={[{ required: true, message: 'Please input your username!' }]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+    <Form.List name="fields">
+      {(fields, { add, remove }) => {
+        return (
+          <div>
+            {fields.map((field, index) => (
+              <div key={field.key}>
+                <Divider>Field {index + 1}</Divider>
+                <Form.Item
+                  name={[index, "name"]}
+                  label="Name"
+                  rules={[{ required: true }]}
+                >
+                  <Input placeholder="field name" />
+                </Form.Item>
+                {fields.length > 1 ? (
+                  <Button
+                    className="dynamic-delete-button"
+                    onClick={() => remove(field.name)}
+                    icon={<MinusCircleOutlined />}
+                  >
+                    Remove Above Field
+                  </Button>
+                ) : null}
+              </div>
+            ))}
+            <Divider />
+            <Form.Item>
+              <Button
+                type="dashed"
+                onClick={() => add()}
+                style={{ width: "60%" }}
+              >
+                <PlusOutlined /> Add field
+              </Button>
+            </Form.Item>
+          </div>
+        );
+      }}
+    </Form.List>
   );
-};
+}
+
+export default DynamicField;
