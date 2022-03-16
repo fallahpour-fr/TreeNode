@@ -79,7 +79,11 @@ export const TreeNode = () => {
 
     const onChangHandler = (e: any) => {
         let inputValue = e.target.value;
-        //   setValue(e.target.value)
+        setValue(inputValue);
+    }
+
+    const saveData=()=>{
+        //save data in root
     }
     console.log(value)
     // console.log('currentNode', currentNode)
@@ -88,10 +92,11 @@ export const TreeNode = () => {
         <button onClick={() => { AddItem((Math.random())) }} >Add</button>
         {currentNode?.childs.map((item: any, index: any) => {
             return <div key={index} >
-                <input placeholder={item.title} id={index} onChange={onChangHandler} />
+                <input placeholder={item.title} name={item.id} onChange={onChangHandler} />
                 <button onClick={() => { showStep(index) }} >{item.id}</button>
                 <button onClick={() => { deleteButton(item.id) }} >Delete</button>
             </div>
         })}
+        <button onClick={()=>{saveData()}}>Save</button>
     </div>
 }
