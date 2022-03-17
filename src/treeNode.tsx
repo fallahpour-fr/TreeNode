@@ -57,17 +57,22 @@ export const TreeNode = () => {
         onSubmit: values => { }
     })
 
+    const bredCrump = (idPath: any, root: any) => {
+        let newNode = root;
+        let arr: any = []
+        for (let i = 0; i < idPath.length - 1; i++) {
+            console.log(newNode.childs)
+            //   arr.push(newNode.childs[i].title)
+            //     newNode=newNode.child[i]
+        }
+
+    }
+
     const AddItem = (id: number) => {
-        // currentNode?.childs.push({
-        //     title: `step`,
-        //     childs: [],
-        //     id: id
-        // });
-        console.log(formik.values.step.childs)
         const current = formik.values.step.childs
         current.push(
             {
-                title: 'step',
+                title: '',
                 childs: [],
                 id: id
             }
@@ -87,39 +92,36 @@ export const TreeNode = () => {
         idPath.push(index);
         setIdPath([...idPath]);
         let currentItem = findCurrentItem(idPath, root);
-        console.log(currentItem)
-        formik.setFieldValue('step', currentItem)
-        // setCurrentNode(currentItem);
-        console.log(formik.values.step)
+        formik.setFieldValue('step', currentItem);
+        bredCrump(idPath, root)
     }
 
     const deleteButton = (id: number) => {
         let currentItem1 = findCurrentItem(idPath, root);
         currentItem1.childs = currentItem1.childs.filter((item: any) => item.id !== id);
-        // setCurrentNode(currentItem1)
-        formik.setFieldValue('step', {...currentItem1})
+        formik.setFieldValue('step', { ...currentItem1 })
         setRoot({ ...root });
     }
 
-    // const onChangHandler = (e: any) => {
-    //     let inputValue = e.target.value;
-    //     setValue(inputValue);
-    // }
+    const onChangHandler = (index: number, newValue: string) => {
+        let currentItem = formik.values.step
+        currentItem.childs[index].title = newValue;
+        formik.setFieldValue('step', { ...currentItem });
+        setRoot({ ...root });
+    }
 
-    // const saveData = () => {
-    //     //save data in root
-    // }
 
-    // console.log('currentNode', currentNode)
     // console.log('root', root);
-    // console.log(formik.values)
+
 
 
 
     return <div>
+        <div></div>
+        <div>{formik.values.step.title}</div>
         <button onClick={() => { AddItem((Math.random())) }} >Add</button>
         {formik.values.step.childs.map((item: any, index: any) => <div key={index} >
-            <input placeholder={item.title} name={item.id} />
+            <input name={item.id} onChange={(event) => onChangHandler(index, event.target.value)} />
             <button onClick={() => { showStep(index) }} >{item.id}</button>
             <button onClick={() => { deleteButton(item.id) }} >Delete</button>
         </div>)}

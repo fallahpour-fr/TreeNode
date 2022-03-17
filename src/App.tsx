@@ -5,6 +5,7 @@ import {DynamicField} from './saveFormData';
 import { Tree } from './Tree';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { textChangeRangeIsUnchanged } from 'typescript';
+import { DynamicForm } from './dynamicForm';
 
 
 function App() {
