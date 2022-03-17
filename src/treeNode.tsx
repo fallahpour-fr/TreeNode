@@ -46,9 +46,9 @@ export const TreeNode = () => {
             id: 0
         }
     );
-    const [currentNode, setCurrentNode] = useState<TreeNode>(root);
     const [idPath, setIdPath] = useState<Array<any>>([]);
-    const [value, setValue] = useState<any>([]);
+    const [title, setTitle] = useState<Array<any>>([]);
+    const [showBredCrumb, setshowBredCrumb]=useState<string>('');
 
     const formik = useFormik<any>({
         initialValues: {
@@ -57,18 +57,21 @@ export const TreeNode = () => {
         onSubmit: values => { }
     })
 
-    const bredCrump = (idPath: any, root: any) => {
+    const findCurrentItem = (idPath: any, root: any) => {
         let newNode = root;
-        let arr: any = []
-        for (let i = 0; i < idPath.length - 1; i++) {
-            console.log(newNode.childs)
-            //   arr.push(newNode.childs[i].title)
-            //     newNode=newNode.child[i]
-        }
-
+        idPath.map((index: any) => newNode = newNode.childs[index]);
+        return newNode;
     }
 
-    const AddItem = (id: number) => {
+    const bredCrump = (idPath: any, root: any) => {
+        title.push(findCurrentItem(idPath, root).title);
+        setTitle([...title]);
+        return title;
+    }
+
+
+
+    const AddItemHandler = (id: number) => {
         const current = formik.values.step.childs
         current.push(
             {
@@ -82,21 +85,14 @@ export const TreeNode = () => {
         setRoot({ ...root });
     }
 
-    const findCurrentItem = (idPath: any, root: any) => {
-        let newNode = root;
-        idPath.map((index: any) => newNode = newNode.childs[index]);
-        return newNode;
-    }
-
-    const showStep = (index: number) => {
+    const showStepHandler = (index: number) => {
         idPath.push(index);
         setIdPath([...idPath]);
         let currentItem = findCurrentItem(idPath, root);
         formik.setFieldValue('step', currentItem);
-        bredCrump(idPath, root)
     }
 
-    const deleteButton = (id: number) => {
+    const deleteButtonHandler = (id: number) => {
         let currentItem1 = findCurrentItem(idPath, root);
         currentItem1.childs = currentItem1.childs.filter((item: any) => item.id !== id);
         formik.setFieldValue('step', { ...currentItem1 })
@@ -110,6 +106,10 @@ export const TreeNode = () => {
         setRoot({ ...root });
     }
 
+    useEffect(() => {
+        let bredCrumpLink=bredCrump(idPath, root).join('/');
+          setshowBredCrumb(bredCrumpLink)
+    }, [idPath])
 
     // console.log('root', root);
 
@@ -117,13 +117,13 @@ export const TreeNode = () => {
 
 
     return <div>
-        <div></div>
-        <div>{formik.values.step.title}</div>
-        <button onClick={() => { AddItem((Math.random())) }} >Add</button>
+        <div>{showBredCrumb}</div>
+        <h2>{formik.values.step.title}</h2>
+        <button onClick={() => { AddItemHandler((Math.random())) }} >Add</button>
         {formik.values.step.childs.map((item: any, index: any) => <div key={index} >
             <input name={item.id} onChange={(event) => onChangHandler(index, event.target.value)} />
-            <button onClick={() => { showStep(index) }} >{item.id}</button>
-            <button onClick={() => { deleteButton(item.id) }} >Delete</button>
+            <button onClick={() => { showStepHandler(index) }} >{item.id}</button>
+            <button onClick={() => { deleteButtonHandler(item.id) }} >Delete</button>
         </div>)}
     </div>
 }
