@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Form, Divider, Button, Select, Input } from "antd";
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 export const TreeNode = () => {
 
     // type TreeNode = {
@@ -49,6 +50,13 @@ export const TreeNode = () => {
     const [idPath, setIdPath] = useState<Array<any>>([]);
     const [title, setTitle] = useState<Array<any>>([]);
     const [showBredCrumb, setshowBredCrumb]=useState<string>('');
+
+    const validation_schema = Yup.object().shape({
+        root: Yup.object().shape({
+            title: Yup.string()
+                .required("this field is required")
+        })
+    });
 
     const formik = useFormik<any>({
         initialValues: {
