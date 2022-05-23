@@ -1,8 +1,8 @@
-import { TreeNode } from './treeNode';
+import {TreeNode} from "./TreeNodeComponent";
 
 function App() {
   return <div>
-    <TreeNode />
+    <TreeNode/>
   </div>
 }
 

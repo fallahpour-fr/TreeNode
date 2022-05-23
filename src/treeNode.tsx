@@ -60,7 +60,8 @@ export const TreeNode = () => {
         initialValues: {
             step: root
         },
-        onSubmit: values => { }
+        onSubmit: values => { },
+        validationSchema:validation_schema
     })
 
     const findCurrentItem = (idPath: any, root: any) => {
