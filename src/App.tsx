@@ -6,13 +6,14 @@
 // import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 // import { textChangeRangeIsUnchanged } from 'typescript';
 // import { DynamicForm } from './dynamicForm';
-import {ValidationSchemaTest} from "./validationschematest";
-// import {ValidationSchemaExample} from "./validationschematest"
+// import {ValidationSchemaTest} from "./validationschematest";
+// import { ValidationSchemaExample } from "./validationschematest";
+import {ShowTreeNode} from "./showTreeNode";
 
 
 function App() {
   return <div>
-    <ValidationSchemaTest/>
+    <ShowTreeNode />
   </div>
 }
 
