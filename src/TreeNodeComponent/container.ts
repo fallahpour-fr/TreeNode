@@ -2,6 +2,7 @@ import { IModel, ITreeNode } from "./model";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 export const useContainer = (): IModel => {
 
@@ -13,7 +14,7 @@ export const useContainer = (): IModel => {
         }
     );
     const [id_path, set_id_path] = useState<Array<number>>([]);
-
+    let history = useHistory();
 
     const find_current_item = (idPath: Array<number>, root: ITreeNode) => {
         let newNode = root;
@@ -31,8 +32,10 @@ export const useContainer = (): IModel => {
 
 
     const action_onSubmit = (values: ITreeNode) => {
-        console.log(values)
-    }
+        if (values.childs.length !== 0) {
+            history.push("/view/treenode")
+        }
+    };
 
     const formik = useFormik<ITreeNode>({
         initialValues: root,
@@ -41,16 +44,21 @@ export const useContainer = (): IModel => {
     });
     const handler_addStep = () => {
         const childs = formik.values.childs;
-        childs.push(
-            {
-                title: '',
-                childs: [],
-                id: childs.length
-            }
-        );
+        validation_schema.isValid(formik.values)
+            .then((is_valid) => {
+                if (is_valid) {
+                    childs.push(
+                        {
+                            title: '',
+                            childs: [],
+                            id: childs.length
+                        }
+                    );
 
-        formik.setFieldValue('childs', childs);
-        setRoot({ ...root });
+                    formik.setFieldValue('childs', childs);
+                    setRoot({ ...root });
+                }
+            });
     };
 
     const onChange_handler = (index: number, new_value: string) => {
@@ -62,10 +70,18 @@ export const useContainer = (): IModel => {
     };
 
     const handler_addItem = (index: number) => {
-        id_path.push(index);
-        set_id_path([...id_path]);
-        let currentItem = find_current_item(id_path, root);
-        formik.setFieldValue('childs', currentItem.childs);
+        validation_schema.isValid(formik.values)
+            .then((is_valid) => {
+                if (is_valid) {
+                    id_path.push(index);
+                    set_id_path([...id_path]);
+                    let currentItem = find_current_item(id_path, root);
+                    formik.setFieldValue('childs', currentItem.childs);
+                    setRoot({ ...root });
+                }
+
+            })
+
     };
 
     const handler_deleteItem = (id: number) => {
@@ -78,6 +94,7 @@ export const useContainer = (): IModel => {
 
     return {
         form_data: formik.values,
+        form_errors: formik.errors,
         handler_addStep,
         onChange_handler,
         handler_addItem,

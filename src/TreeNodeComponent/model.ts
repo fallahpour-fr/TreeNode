@@ -1,4 +1,4 @@
-import { Formik } from "formik";
+import { FormikErrors } from 'formik';
 export interface ITreeNode {
     title: string,
     childs: Array<ITreeNode>,
@@ -6,7 +6,8 @@ export interface ITreeNode {
 }
 
 export interface IModel {
-    form_data:ITreeNode
+    form_data:ITreeNode;
+    form_errors: FormikErrors<ITreeNode>;
     handler_addStep:Function;
     onChange_handler:Function;
     handler_addItem:Function;
