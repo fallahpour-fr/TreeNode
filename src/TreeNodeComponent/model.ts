@@ -1,3 +1,4 @@
+import { Formik } from "formik";
 export interface ITreeNode {
     title: string,
     childs: Array<ITreeNode>,
@@ -5,9 +6,10 @@ export interface ITreeNode {
 }
 
 export interface IModel {
-    formik:any;
+    form_data:ITreeNode
     handler_addStep:Function;
     onChange_handler:Function;
     handler_addItem:Function;
     handler_deleteItem:Function;
+    action_onSubmit:Function
 }
